@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>机甲风登录</title>
+    <style>
+      :root {
+        --bg: #0a0f1d;
+        --panel: rgba(14, 22, 44, 0.92);
+        --panel-border: #2ef6ff;
+        --panel-shadow: rgba(46, 246, 255, 0.25);
+        --accent: #ffb400;
+        --accent-2: #ff3b7f;
+        --text: #e6f7ff;
+        --muted: #8db3c7;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top, #1b2a4a 0%, #0a0f1d 55%, #05070f 100%);
+        overflow: hidden;
+      }
+
+      .grid-overlay {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(transparent 95%, rgba(46, 246, 255, 0.1) 100%),
+          linear-gradient(90deg, transparent 95%, rgba(46, 246, 255, 0.1) 100%);
+        background-size: 40px 40px;
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      .orbit {
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        border: 1px dashed rgba(46, 246, 255, 0.3);
+        border-radius: 50%;
+        animation: spin 24s linear infinite;
+      }
+
+      .orbit::after {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        top: 60px;
+        right: 60px;
+        box-shadow: 0 0 20px rgba(255, 180, 0, 0.8);
+      }
+
+      .login-card {
+        position: relative;
+        width: 360px;
+        padding: 40px 36px 32px;
+        background: var(--panel);
+        border: 1px solid rgba(46, 246, 255, 0.45);
+        border-radius: 12px;
+        box-shadow: 0 0 35px var(--panel-shadow), inset 0 0 18px rgba(46, 246, 255, 0.15);
+        z-index: 1;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+      }
+
+      .title {
+        font-size: 22px;
+        letter-spacing: 2px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .title span {
+        color: var(--accent);
+      }
+
+      .status {
+        font-size: 12px;
+        color: var(--accent-2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .panel-line {
+        height: 2px;
+        background: linear-gradient(90deg, rgba(46, 246, 255, 0) 0%, rgba(46, 246, 255, 0.6) 50%, rgba(46, 246, 255, 0) 100%);
+        margin-bottom: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-group label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px 14px;
+        background: rgba(7, 12, 26, 0.8);
+        border: 1px solid rgba(46, 246, 255, 0.4);
+        border-radius: 6px;
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .form-group input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 12px rgba(255, 180, 0, 0.4);
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .actions a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .login-button {
+        margin-top: 22px;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #2ef6ff 0%, #1a77ff 55%, #0d2b60 100%);
+        border: none;
+        border-radius: 8px;
+        color: #0a0f1d;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+        transform: translateX(-120%);
+        transition: transform 0.4s ease;
+      }
+
+      .login-button:hover::after {
+        transform: translateX(120%);
+      }
+
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .footer strong {
+        color: var(--accent);
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-overlay" aria-hidden="true"></div>
+    <div class="orbit" aria-hidden="true"></div>
+
+    <main class="login-card">
+      <header class="header">
+        <div class="title">MECHA <span>NODE</span></div>
+        <div class="status">SYSTEM ONLINE</div>
+      </header>
+      <div class="panel-line"></div>
+
+      <form>
+        <div class="form-group">
+          <label for="username">Pilot ID</label>
+          <input type="text" id="username" name="username" placeholder="请输入驾驶员编号" />
+        </div>
+        <div class="form-group">
+          <label for="password">Access Key</label>
+          <input type="password" id="password" name="password" placeholder="请输入访问密钥" />
+        </div>
+        <div class="actions">
+          <span>授权等级：Alpha</span>
+          <a href="#">紧急通道</a>
+        </div>
+        <button class="login-button" type="submit">启动登录</button>
+      </form>
+
+      <div class="footer">Powered by <strong>MechaCore</strong> Interface</div>
+    </main>
+  </body>
+</html>
